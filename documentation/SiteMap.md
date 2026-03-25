@@ -1,24 +1,22 @@
-# Binance Testing Project
-
-It is group project to become fmiliar with fintech app and web testing
-
-## Basic description of Binance
+# Basic description of Binance
 
 **Product essence:** a platform for trading crypto assets, custody, transfers, yield products (earn, staking), token launches, and Web3 access (wallet and adjacent services).
 
 ## Subsystems
 
-- **Identity & Access:** account, 2FA, sessions, KYC pipeline.
+- **Identity & Access:** account, 2FA, sessions, Know Your Customer pipeline (data collection, verification, risk and policy control, account reviews).
 - **Wallet & Ledger:** balances, deposits/withdrawals, internal transfers.
 - **Trading Engine:** order books, matching, market types (spot/futures, etc.).
-- **Payments:** fiat on-ramps, P2P, card gateways (region-dependent).
+- **Payments:** currency-to-crypto, P2P, card gateways (region-dependent).
 - **Risk & Fraud:** limits, blocks, anomaly monitoring.
 - **Notifications:** email/push/in-app.
 - **Support & Compliance:** tickets, appeals, reporting.
 
-## Site map
+# Site map
 
-**Palette:** green / amber / orange — primary mega-menu (surface IA). Blue → violet — authenticated entry from **Home** (**Cabinet**, **Messages**). Deeper violet: **Assets (Wallet)** tabs and **Account** sections. See **Cabinet**, **Account — sections**, **Assets / Wallet tabs**, and **Messages** reference tables.
+**Palette:** 
+- Green / amber / orange — Non-Auth flow. 
+- Blue → violet — Authenticated flow
 
 ```mermaid
 flowchart LR
