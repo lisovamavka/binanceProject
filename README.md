@@ -40,6 +40,25 @@ npm test
 
 ---
 
+## Documentation
+
+All project documentation must follow these rules:
+
+- Documentation files must be stored in the `documentation/` folder  
+- File naming format: `DOCUMENT_NAME.md`  
+- Each document should clearly describe its purpose and scope  
+
+Example:
+
+```
+documentation/
+├── TEST_STRATEGY.md
+├── TEST_PLAN.md
+├── CHECKLIST.md
+```
+
+---
+
 ## Notes
 
 - The project is created for UI end-to-end testing with Playwright.
