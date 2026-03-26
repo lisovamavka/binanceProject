@@ -12,10 +12,14 @@
 - **Notifications:** email/push/in-app.
 - **Support & Compliance:** tickets, appeals, reporting.
 
+## Navigation caveats
+- not all tabs with dropdown are clickable
+"Trade" and "More" are not clickable and serve only for grouping purposes
+
 # Site map
 
 **Palette:** 
-- Green / amber / orange — Non-Auth flow. 
+- Green / amber / orange — Non-Auth flow (**Trade** / **More** and their child links share the same solid green. Both are dropdown groups, not destination pages). 
 - Blue → violet — Authenticated flow
 
 ```mermaid
@@ -23,11 +27,11 @@ flowchart LR
     Home[Home]
     Home --> BuyCrypto[Buy Crypto]
     Home --> Markets[Markets]
-    Home --> Trade[Trade]
+    Home --> Trade["Trade (dropdown)"]
     Home --> Futures[Futures]
     Home --> Earn[Earn]
     Home --> Square[Square]
-    Home --> More[More]
+    Home --> More["More (dropdown)"]
 
     BuyCrypto --> BuyCryptoBuySell["Buy & Sell"]
     BuyCrypto --> BuyCryptoDeposit[Deposit]
@@ -190,12 +194,14 @@ flowchart LR
     classDef depth1-auth fill:#3b82f6,stroke:#1d4ed8,color:#fff
     classDef depth2-auth fill:#8b5cf6,stroke:#5b21b6,color:#fff
     classDef depth3-auth fill:#c4b5fd,stroke:#6d28d9,color:#1e1b4b
+    classDef tradeLeaf fill:#16a34a,stroke:#14532d,color:#fff
     class Home depth0
     class Cabinet,Messages depth1-auth
     class CabinetDashboard,CabinetAssetsWallet,CabinetOrders,CabinetRewardsHub,CabinetReferral,CabinetAccount,CabinetSubAccounts,CabinetSettings,MessagesChat,MessagesAnnouncement,MessagesCampaign,MessagesMarketingActivities,MessagesAccount depth2-auth
     class WalletTabOverview,WalletTabSpot,WalletTabMargin,WalletTabFutures,WalletTabOptions,WalletTabTradingBots,WalletTabEarn,WalletTabFunding,WalletTabVerification,WalletTabThirdParty,OrdersSectionAssetHistory,OrdersSectionSpotOrder,OrdersSectionP2pOrder,AccountIdentification,AccountSecurity,AccountPayment,AccountApiManagement,AccountStatement,AccountFinancialReport depth3-auth
-    class BuyCrypto,Markets,Trade,Futures,Earn,Square,More depth1
-    class BuyCryptoBuySell,BuyCryptoDeposit,BuyCryptoWithdraw,MarketsOverview,MarketsTradingData,MarketsAiSelect,MarketsTokenUnlock,TradeBasicSpot,TradeBasicMargin,TradeBasicP2p,TradeBasicConvertBlockTrade,TradeBasicDemoTrading,TradeAdvancedDexBeta,TradeAdvancedAlpha,TradeAdvancedTradingBots,TradeAdvancedCopyTrading,TradeAdvancedApis,FuturesUsdMargined,FuturesCoinMargined,FuturesOptions,EarnOverview,EarnSimpleEarn,EarnAdvancedEarn,EarnLoans,SquareContent,SquareBlog,SquareResearch,MoreVipInstitutional,MoreAffiliate,MoreReferral,MoreBinanceJunior,MoreLaunchpool,MoreMegadrop,MoreMiningPool,MorePay,MoreNft,MoreFanToken,MoreBinanceWallet,MoreBnbChain,MoreBinanceAcademy,MoreCharity,MoreTravelRule depth2
+    class BuyCrypto,Markets,Futures,Earn,Square depth1
+    class Trade,TradeBasicSpot,TradeBasicMargin,TradeBasicP2p,TradeBasicConvertBlockTrade,TradeBasicDemoTrading,TradeAdvancedDexBeta,TradeAdvancedAlpha,TradeAdvancedTradingBots,TradeAdvancedCopyTrading,TradeAdvancedApis,More,MoreVipInstitutional,MoreAffiliate,MoreReferral,MoreBinanceJunior,MoreLaunchpool,MoreMegadrop,MoreMiningPool,MorePay,MoreNft,MoreFanToken,MoreBinanceWallet,MoreBnbChain,MoreBinanceAcademy,MoreCharity,MoreTravelRule tradeLeaf
+    class BuyCryptoBuySell,BuyCryptoDeposit,BuyCryptoWithdraw,MarketsOverview,MarketsTradingData,MarketsAiSelect,MarketsTokenUnlock,FuturesUsdMargined,FuturesCoinMargined,FuturesOptions,EarnOverview,EarnSimpleEarn,EarnAdvancedEarn,EarnLoans,SquareContent,SquareBlog,SquareResearch depth2
     class MarketsOverviewFavorites,MarketsOverviewCryptosDefault,MarketsOverviewSpot,MarketsOverviewFeatures,MarketsOverviewAlpha,MarketsOverviewNew,MarketsOverviewZones depth3
 ```
 
