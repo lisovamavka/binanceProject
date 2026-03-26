@@ -1,4 +1,4 @@
-# Basic description of Binance
+# Site Map - binanceProject
 
 **Product essence:** a platform for trading crypto assets, custody, transfers, yield products (earn, staking), token launches, and Web3 access (wallet and adjacent services).
 
@@ -15,8 +15,6 @@
 ## Navigation caveats
 - not all tabs with dropdown are clickable
 "Trade" and "More" are not clickable and serve only for grouping purposes
-
-# Site map
 
 **Palette:** 
 - Green / amber / orange — Non-Auth flow (**Trade** / **More** and their child links share the same solid green. Both are dropdown groups, not destination pages). 
