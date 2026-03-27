@@ -1,10 +1,9 @@
 #  Test Plan — BinanceProject 
 
 ## 1. Introduction
-This document defines the test plan for automated end-to-end (E2E) UI smoke testing of the public Binance website.
+This document defines the test plan for automated smoke testing of the public Binance website.
 
-The testing scope is limited to **public (non-authenticated)** areas of the application.  
-The purpose is to validate that critical user entry points and navigation paths are stable, accessible, and functioning correctly.
+The testing covers only critical public (non-authenticated) entry points and main navigation paths, ensuring they are accessible and render correctly. The focus is on quickly detecting major issues in core flows, without testing full end-to-end functionality.
 
 ---
 
@@ -68,12 +67,23 @@ The objectives of this testing are to:
 
 ---
 
-## 5. Test Items (Features to be Tested)
+## 5. Test Environment
+
+- Environment: Production
+- Base URL: https://www.binance.com/en
+- Region: Europe
+- Language: English
+- Browsers: Chromium, WebKit
+- Tool: Playwright
+- CI: GitHub Actions
+
+
+---
+## 6. Test Items (Features to be Tested)
 
 ### P0 (Critical)
 - Homepage (`/en`)
 - Header Navigation (NavBar)
-- Redirect from root URL (`/ → /en`)
 - Markets Page (`/en/markets`)
 
 ### P1 (High)
@@ -86,18 +96,6 @@ The objectives of this testing are to:
 
 ---
 
-## 6. Test Environment
-
-- Environment: Production
-- Base URL: https://www.binance.com/en
-- Region: Europe
-- Language: English
-- Browsers: Chromium, WebKit
-- Tool: Playwright
-- CI: GitHub Actions
-
-
----
 
 ## 7. Test Approach
 
@@ -115,10 +113,10 @@ The objectives of this testing are to:
 - Use explicit waits only (no hard waits)
 
 ### Execution Strategy
-- CI triggered on Push / Pull Request
-- Parallel execution enabled
-- Retries configured for flaky tests
-- Tests are independent and isolated
+- CI workflow is triggered on push and pull_request events targeting the main and master branches.
+- Tests run in parallel to reduce overall execution time.
+- Retries are applied to all failed tests in CI, not only to flaky tests, according to the configuration in playwright.config.ts.
+- Tests are independent and isolated, ensuring no cross-test dependencies.
 
 ---
 
@@ -164,11 +162,8 @@ The objectives of this testing are to:
 - Verify page loads successfully
 - Check main widget/form visibility
 
-### 5. Footer Navigation
-- Validate Fees page opens correctly
-- Ensure page renders without errors
 
-### 6. Negative / Invalid Paths
+### 5. Negative / Invalid Paths
 - Open invalid URL
 - Verify 404 page or proper redirect
 - Ensure no 5xx server errors
@@ -208,23 +203,31 @@ Suggested ownership model:
 
 ---
 
-## 13. CI/CD & Execution
+13. CI/CD & Execution
+Tool: GitHub Actions
+Trigger: CI runs on push and pull_request events only for main and master branches
+Browsers: Chromium, WebKit
+Retries: Applied to all tests that fail in CI (configured in playwright.config.ts)
+Parallel execution: Enabled to speed up test runs
+Headless mode: Enabled in CI
 
-- Tool: GitHub Actions
-- Trigger: Push / Pull Request
-- Browsers: Chromium, WebKit
-- Retries: 2 for failed tests
-- Parallel execution enabled
-- Headless mode in CI
+Artifacts
+Screenshots for failed steps
+Test execution videos
+Playwright traces for debugging
+HTML test reports
+Merge policy: PR merge is blocked if any test fails
+Responsibility: PR author is responsible for fixing failed tests
 
-### Artifacts
-- Screenshots
-- Videos
-- Playwright traces
-- HTML reports
+Artifacts
+Screenshots for failed steps
+Test execution videos
+Playwright traces for debugging
+HTML test reports
 
-- Failed tests block merge
-- PR author is responsible for fixing failures
+Quality Gates
+PR merge is blocked if any test fails
+PR author is responsible for fixing failed tests
 
 ---
 
