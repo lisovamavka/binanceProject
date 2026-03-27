@@ -1,165 +1,322 @@
-Test Plan — binanceProject
-1. Introduction
-This document describes the test plan for the binanceProject, which contains automated end-to-end (E2E) UI tests built with Playwright.
-Purpose:
-Practice UI test automation, CI integration, and team collaboration.
-Validate basic functionality of the Binance public website (English, Europe region).
-Main goal:
-Ensure that key public pages of the Binance website load correctly and work as expected using automated tests.
+#  Test Plan — BinanceProject 
 
-2. Objectives
-Verify accessibility and functionality of key public pages
-Detect critical failures (5xx errors, broken navigation)
-Validate visibility and usability of core UI elements
-Provide fast feedback via smoke tests
-Maintain a stable and maintainable test suite for a small team
+## 1. Introduction
+This document defines the test plan for automated end-to-end (E2E) UI smoke testing of the public Binance website.
 
-3. Scope
-In Scope
-Web UI testing (Playwright)
-Public pages only (no authentication)
-Read-only interactions: navigation, visibility checks, basic UI validation
-Out of Scope
-Login / authentication / 2FA / CAPTCHA
-Trading actions (buy/sell, wallet changes)
-API testing
-Performance / load testing
-Security testing
-Mobile applications
+The testing scope is limited to **public (non-authenticated)** areas of the application.  
+The purpose is to validate that critical user entry points and navigation paths are stable, accessible, and functioning correctly.
 
-4. Features / Test Items
-Test Items define WHAT is being tested:
-Home Page (/en)
-Markets Page (/en/markets)
-Spot Trading Page (/en/trade/BTC_USDT)
-Buy & Sell Page (/en/crypto/buy/USD/BTC)
-Header Navigation (NavBar)
-Footer Navigation Links (Fees, Help, Support)
-Redirect behavior (root URL, invalid paths)
+---
 
-5. Test Environment
-Environment: Production
-Base URL: https://www.binance.com/en
-Region: Europe
-Language: English
-Browsers: Chromium, WebKit
-Test Framework: Playwright
-CI Tool: GitHub Actions
-OS: macOS (local), Linux (CI)
-Execution Mode: Headless (CI), Headed optional (local)
+## 2. Objectives
+The objectives of this testing are to:
 
-6. Test Approach
-Testing Type: Smoke testing — focus on core functionality and availability
-Test Level: End-to-end (UI)
-Automation: Fully automated with Playwright
-Test Design:
-Based on user-visible behavior
-Focus on critical paths and main UI elements
-Read-only interactions only
-Execution Strategy:
-CI pipeline triggers on push/PR
-Parallel execution enabled
-Retries configured for stability
-Validation Method:
-Assertions on element visibility and page state
-Ensure successful page load (no 5xx)
-Test Data: Static URLs; no accounts required
-Non-functional Considerations: Basic stability checks only
+- Verify accessibility of key public pages 
+- Ensure navigation between main sections works correctly
+- Detect critical failures (5xx errors, blank pages)
+- Validate visibility of core UI elements
+- Provide fast and reliable feedback via smoke tests
 
-7. Test Data
-Home Page: /en
-Markets Page: /en/markets
-Spot Trading Page: /en/trade/BTC_USDT
-Buy & Sell Page: /en/crypto/buy/USD/BTC
-Fees Page: /en/fee/schedule
+---
 
-8. Test Types
-Smoke tests (core paths, fast feedback)
-Negative tests (invalid URLs, redirects)
-Navigation tests (header/footer, dropdowns)
+## 3. Assumptions and Constraints
 
-9. Test Scenarios / Additional Test Scenarios
-1. Header Navigation (NavBar)
-Verify all main navigation items are visible
-Validate dropdown menus open correctly
-Ensure links navigate to correct pages
-Confirm consistent behavior across header items
-Ensure predictable user experience
-2. Redirect Behavior
-Verify redirect to English locale (/en)
-Validate correct behavior when accessing root URL
-Ensure no redirect loops or errors
-3. Footer Navigation
-Validate links to Fees, Help, and Support pages load correctly
-Ensure pages render properly (no blank screens, no 5xx errors)
-4. Negative / Invalid Paths
-Open invalid URL and verify proper handling (404 page or redirect)
-Ensure no server errors (5xx)
+### Assumptions
+- Testing is performed on the production environment
+- Users access Binance without authentication
+- English locale and Europe region are used as baseline
 
-10. Test Design & Standards
-Prefer stable locators (getByRole, getByText)
-Avoid fragile CSS/XPath selectors
-Explicit waits only; no waitForTimeout
-Each test must be independent
-Naming convention: test('Page / Feature: expected behavior', async ({ page }) => {})
+### Constraints
+- No access to login, account, or verification flows
+- No access to wallet or transaction functionality
+- No ability to test state-changing actions
+- Dynamic content (prices, banners) may change frequently
+- UI may vary based on region or anti-bot mechanisms
 
-11. Team Responsibilities
-Team size: 6 members
-Each member implements ≥3 tests (total 18+ expected)
-Work division:
-Home page
-Markets page
-Spot page
-Footer links
-Negative scenarios
-No duplication unless documented in PR
+---
 
-12. CI/CD & Execution
-CI Tool: GitHub Actions
-Trigger: Push / Pull Request to protected branches
-Browsers: Chromium, WebKit
-Retries: 2 for failed tests
-Parallel execution enabled
-Headless mode in CI
-Artifacts: Screenshots, videos, Playwright traces, HTML reports
-Failed tests block merge
-PR author must fix failures
 
-13. Entry & Exit Criteria
-Entry Criteria
-Test environment ready
-Playwright configured
-Test data defined
-Exit Criteria
-All tests executed
-CI pipeline green
-No critical failures
-Required approvals received
 
-14. Defect Management
-Bugs reported via GitHub Issues
-Include steps to reproduce, expected vs actual results, and screenshots/traces
+## 4. Scope
 
-15. Reporting
-Collect artifacts on failure: screenshots, videos, Playwright traces
-HTML reports stored as GitHub Actions artifacts
+### In Scope
+- Public web UI testing (Playwright)
+- Core pages and navigation
+- Read-only interactions (no state changes)
+- Routing and redirect behavior
+- Basic UI validation (visibility, layout)
 
-16. Risks & Mitigation
-Website instability: Use retries, keep tests lightweight
-UI changes: Use stable locators
-Geo-based redirects: Use fixed canonical URLs
-Anti-bot mechanisms: Limit to read-only public pages
-Flaky tests: Use explicit waits
-Test duplication: Track ownership in PRs
-CI failures: PR author fixes issues promptly
+### Out of Scope
+- Login/authentication
+- Registration
+- KYC (identity verification)
+- Account functionality
+- Wallet / balance
+- Deposit / withdrawal
+- Trading execution (placing orders)
+- Payment flows
+- User profile
+- API testing
+- Database validation
+- Security testing
+- Accessibility full audit
+- Mobile applications
+- Admin/back-office functionality
+- CAPTCHA / anti-bot behavior validation
+- Any data-changing operations
 
-17. Observations / Recommendations
-Header navigation behavior is inconsistent: some items open dropdowns, others navigate directly
-Recommendation: Standardize header navigation for consistent UX
 
-18. Approval
-QA Engineer
-Team Lead
-Project stakeholders / Product Owner
+---
 
+## 5. Test Items (Features to be Tested)
+
+### P0 (Critical)
+- Homepage (`/en`)
+- Header Navigation (NavBar)
+- Redirect from root URL (`/ → /en`)
+- Markets Page (`/en/markets`)
+
+### P1 (High)
+- Spot Trading Page (`/en/trade/BTC_USDT`) – structure only
+- Buy & Sell Page (`/en/crypto/buy/USD/BTC`)
+
+### P2 (Medium)
+- Invalid URLs handling (404 / redirect)
+- General routing stability
+
+---
+
+## 6. Test Environment
+
+- Environment: Production
+- Base URL: https://www.binance.com/en
+- Region: Europe
+- Language: English
+- Browsers: Chromium, WebKit
+- Tool: Playwright
+- CI: GitHub Actions
+
+
+---
+
+## 7. Test Approach
+
+### Testing Strategy
+- Type: Smoke Testing
+- Level: End-to-End (UI)
+- Mode: Fully automated
+
+### Key Principles
+- Test only public, read-only flows
+- Focus on high-impact user paths
+- Validate structure and visibility (not dynamic data)
+- Avoid brittle assertions
+- Use stable locators (`getByRole`, `getByText`)
+- Use explicit waits only (no hard waits)
+
+### Execution Strategy
+- CI triggered on Push / Pull Request
+- Parallel execution enabled
+- Retries configured for flaky tests
+- Tests are independent and isolated
+
+---
+
+## 8. Test Data and Configuration
+
+- Predefined set of URLs is used
+- No user accounts or credentials required
+- No user accounts or credentials are used
+- Tests operate in read-only mode only
+
+
+---
+
+## 9. Test Types
+
+- Smoke Tests (core functionality)
+- Navigation Tests (header, footer, routing)
+- Negative Tests (invalid URLs, error handling)
+
+---
+
+## 10. Test Scenarios
+
+### 1. Header Navigation (NavBar)
+- Verify all main navigation items are visible
+- Validate dropdown menus open correctly
+- Ensure links navigate to correct pages
+- Confirm consistent behavior across header items
+- Ensure predictable user experience
+
+### 2. Redirect Behavior
+- Verify redirect from root URL to `/en`
+- Validate correct locale handling
+- Ensure no redirect loops or errors
+
+### 3. Core Pages Load
+- Open Homepage and verify it loads successfully
+- Open Markets page and verify rendering
+- Open Trading page (structure only)
+
+### 4. Buy & Sell Page
+- Open `/en/crypto/buy/USD/BTC`
+- Verify page loads successfully
+- Check main widget/form visibility
+
+### 5. Footer Navigation
+- Validate Fees page opens correctly
+- Ensure page renders without errors
+
+### 6. Negative / Invalid Paths
+- Open invalid URL
+- Verify 404 page or proper redirect
+- Ensure no 5xx server errors
+
+---
+
+## 11. Test Design & Standards
+
+- Use stable selectors (`getByRole`, `getByText`)
+- Avoid XPath and fragile CSS selectors
+- Do not use `waitForTimeout`
+- Each test must be independent
+
+Naming convention:
+```js
+test('Page / Feature: expected behavior', async ({ page }) => {})
+---
+
+## 12. Team Responsibilities
+
+Team responsibilities include:
+
+- Implementing automated tests
+- Avoiding duplicate coverage
+- Reviewing pull requests
+- Maintaining test stability
+
+Suggested ownership model:
+- QA 1: Homepage
+- QA 2: Header
+- QA 3: Markets
+- QA 4: Trading pages (read-only)
+- QA 5: Negative scenarios / reporting
+- QA 6: Positive scenarios
+
+
+
+---
+
+## 13. CI/CD & Execution
+
+- Tool: GitHub Actions
+- Trigger: Push / Pull Request
+- Browsers: Chromium, WebKit
+- Retries: 2 for failed tests
+- Parallel execution enabled
+- Headless mode in CI
+
+### Artifacts
+- Screenshots
+- Videos
+- Playwright traces
+- HTML reports
+
+- Failed tests block merge
+- PR author is responsible for fixing failures
+
+---
+
+## 14. Entry Criteria
+
+Testing starts when:
+
+- Playwright project is configured
+- Base URL is defined
+- CI pipeline is set up
+- Scope and priorities are agreed
+- Test ownership is assigned
+
+---
+
+## 15. Exit Criteria (Definition of Done)
+
+Testing is considered complete when:
+
+- 100% of P0 scenarios are automated and passing
+- Agreed P1 scenarios are implemented
+- All tests pass in CI for target browsers
+- No critical defects remain in tested scope
+- Code is reviewed and approved (minimum 2 reviewers)
+- Documentation is finalized and stored in repository
+
+
+---
+
+## 16. Defect Management
+
+Defects are tracked via GitHub Issues and must include:
+
+- Title
+- Steps to reproduce
+- Expected result
+- Actual result
+- Environment
+- Severity / priority
+- Screenshot / trace
+
+---
+
+## 17. Reporting
+
+- HTML reports generated by Playwright
+- Artifacts stored in GitHub Actions
+- Failures include screenshots, videos, traces
+
+---
+
+## 18. Risks
+
+- Frequent UI changes in production
+- Dynamic content instability
+- Geo-based differences
+- Anti-bot protection
+- Flaky tests
+
+---
+
+## 19. Risk Mitigation
+
+- Use stable locators
+- Avoid validating dynamic data
+- Use retries in CI
+- Keep tests small and independent
+- Use fixed canonical URLs
+
+---
+
+## 20. Observations / Recommendations
+
+- Header navigation is inconsistent:
+  - Some items open dropdowns
+  - Others navigate directly
+
+**Recommendation:** standardize navigation behavior for consistent UX
+
+---
+
+## 21. Approval
+
+This test plan is approved after team agreement on:
+
+- Scope
+- Priorities
+- Responsibilities
+- Execution approach
+
+
+- QA Engineers  
+- Team Lead  
+- Project stakeholders / Product Owner  
 
