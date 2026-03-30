@@ -67,6 +67,12 @@ export class RootHeader {
     }
 
     public async searchContentIsVisibleAfterClick() {
+        await this.page.keyboard.press('Escape');
+        // somehow search panel in headless mode is blocked by google popup
+        // remove credential_picker_container if shown
+        await this.page.evaluate(() => {
+            document.getElementById('credential_picker_container')?.remove();
+        });
         await this.searchInput.click();
         await expect(this.searchContent).toBeVisible();
     }
