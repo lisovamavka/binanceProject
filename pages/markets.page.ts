@@ -3,7 +3,7 @@ import { BasePage } from './base.page';
 import { MarketsTopTabsComponent } from './components/markets-top-tabs.component';
 
 export class MarketsPage extends BasePage {
-    public topTabs: MarketsTopTabsComponent;
+    readonly topTabs: MarketsTopTabsComponent;
 
     constructor(page: Page) {
         super(page);

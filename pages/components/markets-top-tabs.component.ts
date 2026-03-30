@@ -3,10 +3,10 @@ import { Locator, Page } from '@playwright/test';
 export class MarketsTopTabsComponent {
     private page: Page;
 
-    public overviewTab: Locator;
-    public tradingDataTab: Locator;
-    public aiSelectTab: Locator;
-    public tokenUnlockTab: Locator;
+    readonly overviewTab: Locator;
+    readonly tradingDataTab: Locator;
+    readonly aiSelectTab: Locator;
+    readonly tokenUnlockTab: Locator;
 
     constructor(page: Page) {
         this.page = page;
