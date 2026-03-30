@@ -19,6 +19,9 @@ export class RootHeader {
     public loginButton: Locator;
     public signupButton: Locator;
     public searchInput: Locator;
+    public scanToDownloadIcon: Locator;
+    public languageIcon: Locator;
+    public darkModeIcon: Locator;
 
     //dropdown locators
     public tradeDropdown: Locator;
@@ -43,6 +46,10 @@ export class RootHeader {
         this.loginButton = page.locator('#toLoginPage').getByRole('button', { name: 'Log In' });
         this.signupButton = page.locator('#toRegisterPage').getByText('Sign Up');
         this.searchInput = page.locator('.search-icon');
+        this.scanToDownloadIcon = page.locator('.header-menu-rightItem > .bn-svg').first();
+        this.languageIcon = page.locator('.header-menu-rightItem > .bn-svg').nth(1);
+        this.darkModeIcon = page.locator('.header-menu-rightItem > .bn-svg').nth(2);
+
         this.searchContent = page.locator('.header-search-content');
 
         this.tradeDropdown = page.locator('.header-menu-item-active:has(#ba-trade) > .header-menu-subgrid');
@@ -50,6 +57,7 @@ export class RootHeader {
         this.earnDropdown = page.locator('.header-menu-item-active:has(#ba-Earntitle) > .header-menu-subgrid');
         this.squareDropdown = page.locator('.header-menu-item-active:has(#ba-Square) > .header-menu-subgrid');
         this.moreDropdown = page.locator('.header-menu-item-active:has(#ba-moreManagement) > .header-menu-subgrid');
+        
     }
 
     public async dropdownIsVisible() {
@@ -64,6 +72,9 @@ export class RootHeader {
         await expect(this.loginButton).toBeVisible();
         await expect(this.signupButton).toBeVisible();
         await expect(this.searchInput).toBeVisible();
+        await expect(this.scanToDownloadIcon).toBeVisible();
+        await expect(this.languageIcon).toBeVisible();
+        await expect(this.darkModeIcon).toBeVisible();
     }
 
     public async searchContentIsVisibleAfterClick() {
@@ -101,4 +112,5 @@ export class RootHeader {
         await this.more.hover();
         await expect(this.moreDropdown).toBeVisible();
     }
+
 }
