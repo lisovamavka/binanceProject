@@ -16,6 +16,8 @@ function waitForAppleAuthPage(mainPage: Page): Promise<Page> {
 }
 
 test.describe('Sign in with Apple', () => {
+  test.skip(!!process.env.CI, 'External Binance / Apple flow — run locally only');
+
   test('should open Apple auth popup', async ({ page }) => {
     const homePage = new HomePage(page);
     await test.step('Go to the sign in page', async () => {
