@@ -8,23 +8,18 @@ export class BasePage {
     }
 
     // Shared helper for dismissing blocking overlays that may prevent UI interactions.
-    protected async dismissBlockingOverlays(): Promise<void> {
-        const blockingOverlay = this.page.locator('div.bn-mask.bn-modal.modalForm[role="presentation"]');
-
-        try {
-            if (await blockingOverlay.isVisible({ timeout: 5000 })) {
-                await this.page.keyboard.press('Escape');
-                await this.page.keyboard.press('Escape');
-            }
-        } catch {
-            // overlay is not visible
+    protected async dismissBlockingOverlays() {
+        await this.page.locator('div.bn-mask.bn-modal.modalForm').first()
+            .waitFor({ state: 'visible', timeout: 12_000 })
+            .catch(() => {});
+        for (let i = 0; i < 100; i++) {
+            await this.page.keyboard.press('Escape');
         }
-
         await this.page.evaluate(() => {
             document.getElementById('credential_picker_container')?.remove();
             document
                 .querySelectorAll('div.bn-mask.bn-modal.modalForm[role="presentation"]')
-                .forEach((element) => element.remove());
+                .forEach((el) => el.remove());
         });
     }
 }
