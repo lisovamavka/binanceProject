@@ -1,5 +1,18 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import { HomePage } from '../../pages/home.page';
+
+/**
+ * Waits for Apple auth without assuming a single flow:
+ * popup, new page in context, or same-tab navigation (local vs CI).
+ */
+function waitForAppleAuthPage(mainPage: Page): Promise<Page> {
+  const context = mainPage.context();
+  return Promise.race([
+    mainPage.waitForEvent('popup'),
+    context.waitForEvent('page'),
+    mainPage.waitForURL(/appleid\.apple\.com/).then(() => mainPage),
+  ]);
+}
 
 test.describe('Sign in with Apple', () => {
   test('should open Apple auth popup', async ({ page }) => {
@@ -12,32 +25,28 @@ test.describe('Sign in with Apple', () => {
       await expect(homePage.appleLoginButton).toBeVisible();
       await expect(homePage.appleLoginButton).toBeEnabled();
 
-      const [applePopup] = await Promise.all([
-        page.waitForEvent('popup'),
+      const [appleAuthPage] = await Promise.all([
+        waitForAppleAuthPage(page),
         homePage.appleLoginButton.click(),
       ]);
 
-      await applePopup.waitForLoadState('domcontentloaded');
+      await appleAuthPage.waitForLoadState('domcontentloaded');
 
-      //check popup URL
-      await expect(applePopup).toHaveURL(/appleid\.apple\.com\/auth\/authorize/);
+      await expect(appleAuthPage).toHaveURL(/appleid\.apple\.com\/auth\/authorize/);
 
-      //check sign in with iphone button
-      await expect(applePopup.locator('#swp')).toBeVisible();
-      await expect(applePopup.locator('#swp')).toBeEnabled();
+      await expect(appleAuthPage.locator('#swp')).toBeVisible();
+      await expect(appleAuthPage.locator('#swp')).toBeEnabled();
 
-      let emailField = applePopup.getByRole('textbox', { name: 'Email or phone number' });
-      // Check email field
+      const emailField = appleAuthPage.getByRole('textbox', {
+        name: /Email or phone|Е[- ]?адреса|phone number|адреса чи телефон/i,
+      });
       await expect(emailField).toBeVisible();
 
-      let continueButton = applePopup.locator('#sign-in');
-      //check continue button is disabled
+      const continueButton = appleAuthPage.locator('#sign-in');
       await expect(continueButton).toBeDisabled();
 
-      //fill email field with test email
       await emailField.fill('test@test.com');
 
-      //check continue button is enabled
       await expect(continueButton).toBeEnabled();
     });
   });

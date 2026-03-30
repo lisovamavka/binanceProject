@@ -4,7 +4,7 @@ import { RootHeader } from "./components/root-header.component";
 export class HomePage {
     private page: Page;
     public header: RootHeader;
-    public appleLoginButton: Locator;
+    readonly appleLoginButton: Locator;
     private overlayHandlersRegistered = false;
 
     constructor(page: Page) {
