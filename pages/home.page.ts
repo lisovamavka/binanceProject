@@ -1,14 +1,16 @@
-import { Page } from "@playwright/test";
+import { Page, Locator } from "@playwright/test";
 import { RootHeader } from "./components/root-header.component";
 
 export class HomePage {
     private page: Page;
     public header: RootHeader;
+    public appleLoginButton: Locator;
     private overlayHandlersRegistered = false;
 
     constructor(page: Page) {
         this.page = page;
         this.header = new RootHeader(page);
+        this.appleLoginButton = page.locator('#apple-login > .third-part-btn');
     }
 
     private async dismissBlockingOverlays() {
