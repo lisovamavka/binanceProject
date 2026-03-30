@@ -1,29 +1,14 @@
 import { Page } from "@playwright/test";
 import { RootHeader } from "./components/root-header.component";
+import { BasePage } from "./base.page";
 
-export class HomePage {
-    private page: Page;
+export class HomePage extends BasePage {
     public header: RootHeader;
     private overlayHandlersRegistered = false;
 
     constructor(page: Page) {
-        this.page = page;
+        super(page);
         this.header = new RootHeader(page);
-    }
-
-    private async dismissBlockingOverlays() {
-        await this.page.locator('div.bn-mask.bn-modal.modalForm').first()
-            .waitFor({ state: 'visible', timeout: 12_000 })
-            .catch(() => {});
-        for (let i = 0; i < 2; i++) {
-            await this.page.keyboard.press('Escape');
-        }
-        await this.page.evaluate(() => {
-            document.getElementById('credential_picker_container')?.remove();
-            document
-                .querySelectorAll('div.bn-mask.bn-modal.modalForm[role="presentation"]')
-                .forEach((el) => el.remove());
-        });
     }
 
     async goto() {
