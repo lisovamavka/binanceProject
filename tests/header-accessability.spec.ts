@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 import { HomePage } from '../pages/home.page';
 
-test('Header accessibility', async ({ page }) => {
+test('C46,C48 - Header accessibility', async ({ page }) => {
     const homePage = new HomePage(page);
 
     await homePage.goto();
