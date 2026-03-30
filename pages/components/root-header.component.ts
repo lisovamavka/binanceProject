@@ -30,6 +30,8 @@ export class RootHeader {
     public squareDropdown: Locator;
     public moreDropdown: Locator;
     public searchContent: Locator;
+    private readonly basicTradeOptions = ['Spot', 'Margin', 'P2P', 'Convert & Block Trade', 'Demo Trading'] as const;
+    private readonly advancedTradeOptions = ['DEX', 'Alpha', 'Trading Bots', 'Copy Trading', 'APIs'] as const;
 
 
     constructor(page: Page) {
@@ -88,9 +90,55 @@ export class RootHeader {
         await expect(this.searchContent).toBeVisible();
     }
 
+    public async tradeDropdownOptionsAreVisible(locator: Locator) {
+        await expect(locator).toBeVisible();
+        await locator.click({ trial: true });
+    }
+
+    public getTradeOption(option: string): Locator {
+        const byLink = this.tradeDropdown.getByRole('link', { name: option, exact: true });
+        const byMenuItem = this.tradeDropdown.getByRole('menuitem', { name: option, exact: true });
+        const byText = this.tradeDropdown.getByText(option, { exact: true });
+        return byLink.or(byMenuItem).or(byText).first();
+    }
+
     public async tradeDropdownIsVisible() {
         await this.trade.hover();
         await expect(this.tradeDropdown).toBeVisible();
+        await expect(this.tradeDropdown.getByText('Basic', { exact: true })).toBeVisible();
+        await expect(this.tradeDropdown.getByText('Advanced', { exact: true })).toBeVisible();
+
+        for (const option of this.basicTradeOptions) {
+            await this.tradeDropdownOptionsAreVisible(this.getTradeOption(option));
+        }
+
+        for (const option of this.advancedTradeOptions) {
+            await this.tradeDropdownOptionsAreVisible(this.getTradeOption(option));
+        }
+    }
+
+    public async tradeOptionsHaveDescriptions() {
+        await this.trade.hover();
+        await expect(this.tradeDropdown).toBeVisible();
+
+        const allOptions = [...this.basicTradeOptions, ...this.advancedTradeOptions];
+        for (const option of allOptions) {
+            const optionLocator = this.getTradeOption(option);
+            await expect(optionLocator).toBeVisible();
+            // Read the whole option card text (title + description), not only the title node.
+            const optionCard = optionLocator.locator('xpath=ancestor::*[self::a or self::li][1]');
+            const cardText = (await optionCard.innerText()).replace(/\s+/g, ' ').trim();
+            expect(cardText.length).toBeGreaterThan(option.length);
+        }
+    }
+
+    public async clickSpotAndVerifyRedirect() {
+        await this.trade.hover();
+        const spotOption = this.getTradeOption('Spot');
+        await expect(spotOption).toBeVisible();
+        await spotOption.click();
+        await this.page.waitForLoadState('domcontentloaded');
+        await expect(this.page).toHaveURL(/\/(en\/)?trade/i);
     }
 
     public async futuresDropdownIsVisible() {
