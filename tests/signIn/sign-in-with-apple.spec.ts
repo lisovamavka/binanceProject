@@ -4,10 +4,11 @@ import { HomePage } from '../../pages/home.page';
 /**
  * Waits for Apple auth without assuming a single flow:
  * popup, new page in context, or same-tab navigation (local vs CI).
+ * Uses Promise.any (not race) so one waiter timing out does not reject before another succeeds.
  */
 function waitForAppleAuthPage(mainPage: Page): Promise<Page> {
   const context = mainPage.context();
-  return Promise.race([
+  return Promise.any([
     mainPage.waitForEvent('popup'),
     context.waitForEvent('page'),
     mainPage.waitForURL(/appleid\.apple\.com/).then(() => mainPage),
