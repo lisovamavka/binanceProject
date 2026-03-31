@@ -8,8 +8,8 @@ export class HomePage extends BasePage {
     readonly themeToggleButton: Locator;
 
     readonly googleLoginButton: Locator;
-    
     readonly googleLoginIFrame: Locator;
+    readonly signUpButton: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -18,7 +18,7 @@ export class HomePage extends BasePage {
         this.themeToggleButton = page.locator('.bn-svg.theme-icon');
         this.googleLoginButton = page.locator('#google-login > .third-part-btn');
         this.googleLoginIFrame = page.locator('iframe[src*="accounts.google.com/gsi/"]');
-
+        this.signUpButton = page.locator('#toRegisterPage').getByText('Sign Up');
     }
 
     async goto() {
@@ -34,5 +34,11 @@ export class HomePage extends BasePage {
         await expect(this.themeToggleButton).toBeVisible();
         await expect(this.themeToggleButton).toBeEnabled();
         await this.themeToggleButton.click();
+    }
+  
+    async checkAndClickSignUpButton() {
+        await expect(this.signUpButton).toBeVisible();
+        await expect(this.signUpButton).toBeEnabled();
+        await this.signUpButton.click();
     }
 }
