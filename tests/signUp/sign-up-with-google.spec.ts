@@ -17,9 +17,6 @@ function waitForGoogleAuthPage(mainPage: Page): Promise<Page> {
 // tests simplified to check if the button is visible and enabled and google iframe is defined
 
 test('C59 - Continue with Google from home page', async ({ page }) => {
-  // FedCM flow is not available in CI - skipping this test in CI
-  test.skip(!!process.env.CI, 'External Binance / Google flow — run locally only');
-
   const homePage = new HomePage(page);
   await homePage.goto();
   await expect(homePage.googleLoginButton).toBeVisible();
