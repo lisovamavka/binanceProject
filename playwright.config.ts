@@ -41,6 +41,10 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
+    viewport: { width: 1366, height: 768 },
+    deviceScaleFactor: 1,
+    locale: 'en-US',
+    timezoneId: 'UTC',
   },
 
   /* Configure projects for major browsers */
