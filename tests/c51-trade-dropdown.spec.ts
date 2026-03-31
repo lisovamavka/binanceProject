@@ -5,11 +5,12 @@ test('C51 - Trade dropdown', async ({ page }) => {
     const homePage = new HomePage(page);
     await homePage.goto();
 
-    await homePage.header.trade.hover();
-    await homePage.header.tradeDropdown.waitFor({ state: 'visible' });
-    await expect(homePage.header.tradeDropdown).toBeVisible();
-    await expect(homePage.header.tradeDropdown.getByText('Basic', { exact: true })).toBeVisible();
-    await expect(homePage.header.tradeDropdown.getByText('Advanced', { exact: true })).toBeVisible();
+    await homePage.header.tradeDropdownMenu.hover();
+    await homePage.header.tradeDropdownMenu.waitUntilVisible();
+
+    await expect(homePage.header.tradeDropdownMenu.dropdownContainer).toBeVisible();
+    await expect(homePage.header.tradeDropdownMenu.getSection('Basic')).toBeVisible();
+    await expect(homePage.header.tradeDropdownMenu.getSection('Advanced')).toBeVisible();
 
     const allOptions = homePage.header.tradeDropdownMenu.getItems();
 
@@ -19,8 +20,8 @@ test('C51 - Trade dropdown', async ({ page }) => {
         await homePage.header.tradeDropdownMenu.trialClickOption(option);
     }
 
-    await homePage.header.trade.hover();
-    await homePage.header.tradeDropdown.waitFor({ state: 'visible' });
+    await homePage.header.tradeDropdownMenu.hover();
+    await homePage.header.tradeDropdownMenu.waitUntilVisible();
 
     for (const option of allOptions) {
         const optionLocator = await homePage.header.tradeDropdownMenu.getOption(option);
@@ -31,8 +32,8 @@ test('C51 - Trade dropdown', async ({ page }) => {
         expect(cardText.length).toBeGreaterThan(option.length);
     }
 
-    await homePage.header.trade.hover();
-    await homePage.header.tradeDropdown.waitFor({ state: 'visible' });
+    await homePage.header.tradeDropdownMenu.hover();
+    await homePage.header.tradeDropdownMenu.waitUntilVisible();
 
     const spotLocator = await homePage.header.tradeDropdownMenu.getOption('Spot');
     await expect(spotLocator).toBeVisible();

@@ -1,18 +1,39 @@
 import { Locator, Page } from '@playwright/test';
 
 export class HeaderDropdownComponent {
-    private page: Page;
-    private dropdownContainer: Locator;
-    private items: readonly string[];
+    private readonly page: Page;
+    private readonly trigger: Locator;
+    public readonly dropdownContainer: Locator;
+    private readonly items: readonly string[];
 
-    constructor(page: Page, dropdownContainer: Locator, items: readonly string[]) {
+    constructor(
+        page: Page,
+        trigger: Locator,
+        triggerSelector: string,
+        items: readonly string[],
+    ) {
         this.page = page;
-        this.dropdownContainer = dropdownContainer;
+        this.trigger = trigger;
+        this.dropdownContainer = page.locator(
+            `.header-menu-item-active:has(${triggerSelector}) > .header-menu-subgrid`,
+        );
         this.items = items;
     }
 
     public getItems() {
         return this.items;
+    }
+
+    public async hover(): Promise<void> {
+        await this.trigger.hover();
+    }
+
+    public async waitUntilVisible(): Promise<void> {
+        await this.dropdownContainer.waitFor({ state: 'visible' });
+    }
+
+    public getSection(title: string): Locator {
+        return this.dropdownContainer.getByText(title, { exact: true });
     }
 
     public async getOption(option: string): Promise<Locator> {
@@ -42,6 +63,5 @@ export class HeaderDropdownComponent {
     public async clickOption(option: string): Promise<void> {
         const optionLocator = await this.getOption(option);
         await optionLocator.click();
-        await this.page.waitForLoadState('domcontentloaded');
     }
 }
