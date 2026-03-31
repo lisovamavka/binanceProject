@@ -6,7 +6,6 @@ export class HomePage extends BasePage {
     public header: RootHeader;
     readonly appleLoginButton: Locator;
     readonly themeToggleButton: Locator;
-    private overlayHandlersRegistered = false;
 
     readonly googleLoginButton: Locator;
     
