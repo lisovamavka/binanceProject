@@ -11,12 +11,15 @@ function waitForGoogleAuthPage(mainPage: Page): Promise<Page> {
 }
 
 test('C59 - Continue with Google', async ({ page }) => {
+  // FedCM flow is not available in CI - skipping this test in CI
+  test.skip(!!process.env.CI, 'External Binance / Google flow — run locally only');
+
   const homePage = new HomePage(page);
   await homePage.goto();
 
   const authPagePromise = waitForGoogleAuthPage(page);
   const clickPromise = homePage.googleLoginButton.click();
-  
+
   const [authPage] = await Promise.all([authPagePromise, clickPromise]);
 
   await expect(authPage).toHaveURL(/accounts\.google\.com/);
