@@ -18,7 +18,7 @@ export class HomePage extends BasePage {
         this.googleLoginButton = page.locator('#google-login > .third-part-btn');
         this.googleLoginIFrame = page.locator('iframe[src*="accounts.google.com/gsi/"]');
         this.signUpButton = page.locator('#toRegisterPage').getByText('Sign Up');
-         this.buyCryptoMenuItem = page.locator('#ba-titile2-2');
+        this.buyCryptoMenuItem = page.locator('#ba-titile2-2');
     }
 
     async goto() {

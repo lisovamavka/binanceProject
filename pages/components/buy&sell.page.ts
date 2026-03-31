@@ -14,6 +14,6 @@ export class BuySellPage {
     }
 
     async clickSellTab(): Promise<void> {
-        await this.sellTab.click({ force: true });
+        await this.sellTab.click();
     }
 }
