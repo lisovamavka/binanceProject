@@ -8,11 +8,18 @@ export class HomePage extends BasePage {
     readonly themeToggleButton: Locator;
     private overlayHandlersRegistered = false;
 
+    readonly googleLoginButton: Locator;
+    
+    readonly googleLoginIFrame: Locator;
+
     constructor(page: Page) {
         super(page);
         this.header = new RootHeader(page);
         this.appleLoginButton = page.locator('#apple-login > .third-part-btn');
         this.themeToggleButton = page.locator('.bn-svg.theme-icon');
+        this.googleLoginButton = page.locator('#google-login > .third-part-btn');
+        this.googleLoginIFrame = page.locator('iframe[src*="accounts.google.com/gsi/"]');
+
     }
 
     async goto() {
