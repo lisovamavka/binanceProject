@@ -15,8 +15,8 @@ export class RegisterPage extends BasePage {
         this.header = new RootHeader(page);
         this.continueWithAppleButton = page.getByRole('button', { name: 'Continue with Apple' });
         this.continueWithGoogleButton = page.locator('button[aria-label="Continue with Google"]');
-        this.googleLoginIframe = page.locator('iframe[src*="accounts.google.com/gsi/"]');
         this.continueWithTelegramButton = page.getByRole('button', { name: 'Continue with Telegram' });
+        this.googleLoginIframe = page.locator('iframe[src*="accounts.google.com"]');
     }
 
     async goto() {
