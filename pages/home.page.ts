@@ -15,8 +15,8 @@ export class HomePage extends BasePage {
         this.header = new RootHeader(page);
         this.appleLoginButton = page.locator('#apple-login > .third-part-btn');
         this.googleLoginButton = page.locator('#google-login > .third-part-btn');
-        this.buyCryptoMenuItem = page.locator('#ba-titile2-2');
         this.googleLoginIFrame = page.locator('iframe[src*="accounts.google.com/gsi/"]');
+        this.buyCryptoMenuItem = page.locator('#ba-titile2-2');
     }
 
     async goto() {
