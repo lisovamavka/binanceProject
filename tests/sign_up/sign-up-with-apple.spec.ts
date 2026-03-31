@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import { HomePage } from '../../pages/home.page';
+import { RegisterPage } from '../../pages/register.page';
 
 /**
  * Waits for Apple auth without assuming a single flow:
@@ -15,7 +16,7 @@ function waitForAppleAuthPage(mainPage: Page): Promise<Page> {
   ]);
 }
 
-test.describe('Sign in with Apple', () => {
+test.describe('Sign up with Apple', () => {
   test.skip(!!process.env.CI, 'External Binance / Apple flow — run locally only');
 
   test('should open Apple auth popup', async ({ page }) => {
