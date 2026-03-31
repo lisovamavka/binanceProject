@@ -1,45 +1,35 @@
 import { expect, Locator, Page } from "@playwright/test";
-
+import { HeaderDropdownComponent } from "./header-dropdown.component";
 
 export class RootHeader {
-    // page locator
-    private page: Page;
-    public headerLocator: Locator;
+    private readonly page: Page;
+    public readonly headerLocator: Locator;
     
     // navbar locators
-    public buyCrypto: Locator;
-    public markets: Locator;
-    public trade: Locator;
-    public futures: Locator;
-    public earn: Locator;
-    public square: Locator;
-    public more: Locator;
+    public readonly buyCrypto: Locator;
+    public readonly markets: Locator;
+    public readonly trade: Locator;
+    public readonly futures: Locator;
+    public readonly earn: Locator;
+    public readonly square: Locator;
+    public readonly more: Locator;
     
-    //button locators
-    public loginButton: Locator;
-    public signupButton: Locator;
-    public searchInput: Locator;
-    public scanToDownloadIcon: Locator;
-    public languageIcon: Locator;
-    public darkModeIcon: Locator;
+    // button locators
+    public readonly loginButton: Locator;
+    public readonly signupButton: Locator;
+    public readonly searchInput: Locator;
+    public readonly scanToDownloadIcon: Locator;
+    public readonly languageIcon: Locator;
+    public readonly darkModeIcon: Locator;
 
-    //dropdown locators
-    public tradeDropdown: Locator;
-    public futuresDropdown: Locator;
-    public earnDropdown: Locator;
-    public squareDropdown: Locator;
-    public moreDropdown: Locator;
-    public searchContent: Locator;
-    private readonly basicTradeOptions = ['Spot', 'Margin', 'P2P', 'Convert & Block Trade', 'Demo Trading'] as const;
-    private readonly advancedTradeOptions = ['DEX', 'Alpha', 'Trading Bots', 'Copy Trading', 'APIs'] as const;
+    public readonly searchContent: Locator;
 
-    public getBasicTradeOptions() {
-        return this.basicTradeOptions;
-    }
-
-    public getAdvancedTradeOptions() {
-        return this.advancedTradeOptions;
-    }
+    // dropdown objects
+    public readonly tradeDropdownMenu: HeaderDropdownComponent;
+    public readonly futuresDropdownMenu: HeaderDropdownComponent;
+    public readonly earnDropdownMenu: HeaderDropdownComponent;
+    public readonly squareDropdownMenu: HeaderDropdownComponent;
+    public readonly moreDropdownMenu: HeaderDropdownComponent;
 
     constructor(page: Page) {
         this.page = page;
@@ -61,12 +51,24 @@ export class RootHeader {
 
         this.searchContent = page.locator('.header-search-content');
 
-        this.tradeDropdown = page.locator('.header-menu-item-active:has(#ba-trade) > .header-menu-subgrid');
-        this.futuresDropdown = page.locator('.header-menu-item-active:has(#ba-binanceFutrue) > .header-menu-subgrid');
-        this.earnDropdown = page.locator('.header-menu-item-active:has(#ba-Earntitle) > .header-menu-subgrid');
-        this.squareDropdown = page.locator('.header-menu-item-active:has(#ba-Square) > .header-menu-subgrid');
-        this.moreDropdown = page.locator('.header-menu-item-active:has(#ba-moreManagement) > .header-menu-subgrid');
-        
+        this.tradeDropdownMenu = new HeaderDropdownComponent(page, this.trade, '#ba-trade', [
+            'Spot','Margin','P2P','Convert & Block Trade','Demo Trading','DEX','Alpha','Trading Bots','Copy Trading','APIs',
+        ] as const);
+
+        this.futuresDropdownMenu = new HeaderDropdownComponent(page, this.futures, '#ba-binanceFutrue', [
+            'USDⓈ-M Futures','COIN-M Futures','Options',
+        ] as const);
+
+        this.earnDropdownMenu = new HeaderDropdownComponent(page, this.earn, '#ba-Earntitle', ['Overview','Simple Earn','Advanced Earn','Loans',
+        ] as const);
+
+        this.squareDropdownMenu = new HeaderDropdownComponent(page, this.square, '#ba-Square', [
+            'Square','Blog','Research',
+        ] as const);
+
+        this.moreDropdownMenu = new HeaderDropdownComponent(page, this.more, '#ba-moreManagement', [
+            'VIP & Institutional','Affiliate','Referral','Binance Junior','Launchpool','Megadrop','Mining Pool','Pay','NFT','Fan Token','Binance Wallet','BNB Chain','Binance Academy','Charity','Travel Rule',
+        ] as const);
     }
 
     public async dropdownIsVisible() {
@@ -88,76 +90,12 @@ export class RootHeader {
 
     public async searchContentIsVisibleAfterClick() {
         await this.page.keyboard.press('Escape');
-        // somehow search panel in headless mode is blocked by google popup
-        // remove credential_picker_container if shown
+
         await this.page.evaluate(() => {
             document.getElementById('credential_picker_container')?.remove();
         });
+
         await this.searchInput.click();
         await expect(this.searchContent).toBeVisible();
     }
-
-    public async tradeDropdownOptionsTrialClick(locator: Locator) {
-        await locator.click({ trial: true });
-    }
-
-    public async getTradeOption(option: string): Promise<Locator> {
-        const byLink = this.tradeDropdown.getByRole('link', { name: option, exact: true });
-        if (await byLink.count()) {
-            return byLink;
-        }
-        const byMenuItem = this.tradeDropdown.getByRole('menuitem', { name: option, exact: true });
-        if (await byMenuItem.count()) {
-            return byMenuItem;
-        }
-        return this.tradeDropdown.getByText(option, { exact: true });
-    }
-
-    public async tradeDropdownIsVisible() {
-        await this.trade.hover();
-        await expect(this.tradeDropdown).toBeVisible();
-        await expect(this.tradeDropdown.getByText('Basic', { exact: true })).toBeVisible();
-        await expect(this.tradeDropdown.getByText('Advanced', { exact: true })).toBeVisible();
-
-        for (const option of this.basicTradeOptions) {
-            await this.tradeDropdownOptionsTrialClick(await this.getTradeOption(option));
-        }
-
-        for (const option of this.advancedTradeOptions) {
-            await this.tradeDropdownOptionsTrialClick(await this.getTradeOption(option));
-        }
-    }
-
-    public async getTradeOptionCard(option: string): Promise<Locator> {
-        const optionLocator = await this.getTradeOption(option);
-        return optionLocator.locator('xpath=ancestor::*[self::a or self::li][1]');
-    }
-
-    public async clickSpotAndNavigate() {
-        await this.trade.hover();
-        const spotOption = await this.getTradeOption('Spot');
-        await spotOption.click();
-        await this.page.waitForLoadState('domcontentloaded');
-    }
-
-    public async futuresDropdownIsVisible() {
-        await this.futures.hover();
-        await expect(this.futuresDropdown).toBeVisible();
-    }
-
-    public async earnDropdownIsVisible() {
-        await this.earn.hover();
-        await expect(this.earnDropdown).toBeVisible();
-    }
-
-    public async squareDropdownIsVisible() {
-        await this.square.hover();
-        await expect(this.squareDropdown).toBeVisible();
-    }
-
-    public async moreDropdownIsVisible() {
-        await this.more.hover();
-        await expect(this.moreDropdown).toBeVisible();
-    }
-
 }
