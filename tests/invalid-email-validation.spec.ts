@@ -8,7 +8,7 @@ const invalidCredentials = [
     '12',
     '123',
     '1234',
-    '12345',
+    '12345', // fails - binance thinks it is valid phone number, likely defect
     '09635t4333',
     'test@test',
     'test@tes',
