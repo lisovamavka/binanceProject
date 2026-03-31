@@ -30,7 +30,16 @@ export class RootHeader {
     public squareDropdown: Locator;
     public moreDropdown: Locator;
     public searchContent: Locator;
+    private readonly basicTradeOptions = ['Spot', 'Margin', 'P2P', 'Convert & Block Trade', 'Demo Trading'] as const;
+    private readonly advancedTradeOptions = ['DEX', 'Alpha', 'Trading Bots', 'Copy Trading', 'APIs'] as const;
 
+    public getBasicTradeOptions() {
+        return this.basicTradeOptions;
+    }
+
+    public getAdvancedTradeOptions() {
+        return this.advancedTradeOptions;
+    }
 
     constructor(page: Page) {
         this.page = page;
@@ -88,9 +97,47 @@ export class RootHeader {
         await expect(this.searchContent).toBeVisible();
     }
 
+    public async tradeDropdownOptionsTrialClick(locator: Locator) {
+        await locator.click({ trial: true });
+    }
+
+    public async getTradeOption(option: string): Promise<Locator> {
+        const byLink = this.tradeDropdown.getByRole('link', { name: option, exact: true });
+        if (await byLink.count()) {
+            return byLink;
+        }
+        const byMenuItem = this.tradeDropdown.getByRole('menuitem', { name: option, exact: true });
+        if (await byMenuItem.count()) {
+            return byMenuItem;
+        }
+        return this.tradeDropdown.getByText(option, { exact: true });
+    }
+
     public async tradeDropdownIsVisible() {
         await this.trade.hover();
         await expect(this.tradeDropdown).toBeVisible();
+        await expect(this.tradeDropdown.getByText('Basic', { exact: true })).toBeVisible();
+        await expect(this.tradeDropdown.getByText('Advanced', { exact: true })).toBeVisible();
+
+        for (const option of this.basicTradeOptions) {
+            await this.tradeDropdownOptionsTrialClick(await this.getTradeOption(option));
+        }
+
+        for (const option of this.advancedTradeOptions) {
+            await this.tradeDropdownOptionsTrialClick(await this.getTradeOption(option));
+        }
+    }
+
+    public async getTradeOptionCard(option: string): Promise<Locator> {
+        const optionLocator = await this.getTradeOption(option);
+        return optionLocator.locator('xpath=ancestor::*[self::a or self::li][1]');
+    }
+
+    public async clickSpotAndNavigate() {
+        await this.trade.hover();
+        const spotOption = await this.getTradeOption('Spot');
+        await spotOption.click();
+        await this.page.waitForLoadState('domcontentloaded');
     }
 
     public async futuresDropdownIsVisible() {
