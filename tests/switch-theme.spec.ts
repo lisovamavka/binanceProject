@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { HomePage } from '../pages/home.page';
 
-test.describe.only('Switch Theme', () => {
+test.describe('Switch Theme', () => {
   test('Go to the home page and switch theme', async ({ page }) => {
     const homePage = new HomePage(page);
 
