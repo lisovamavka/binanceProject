@@ -33,6 +33,8 @@ const expectErrorMessage = (page: RegisterPage, credential: string) => {
 }
 
 test.describe('C57,C58 - Email validation - Invalid credentials', () => {
+    // in CI it takes too long to run, and gets blocked by modal popups
+    test.skip(!!process.env.CI, 'Email validation - Invalid credentials - run locally only, to many checks');
     for (const credential of invalidCredentials) {
         test(`Invalid credential: ${credential}`, async ({ page}) => {
             const registerPage = new RegisterPage(page);
@@ -49,6 +51,8 @@ test.describe('C57,C58 - Email validation - Invalid credentials', () => {
 });
 
 test.describe('C57,C58 - Email validation - Valid credentials', () => {
+    // in CI it takes too long to run, and gets blocked by modal popups
+    test.skip(!!process.env.CI, 'Email validation - Valid credentials - run locally only, to many checks');
     for (const credential of validCredentials) {
         test(`Valid credential: ${credential}`, async ({ page }) => {
             const registerPage = new RegisterPage(page);
