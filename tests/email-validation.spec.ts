@@ -1,4 +1,4 @@
-import test, { expect} from "@playwright/test";
+import test, { expect } from "@playwright/test";
 import { RegisterPage } from "../pages/register.page";
 
 const invalidCredentials = [
@@ -36,7 +36,7 @@ test.describe('C57,C58 - Email validation - Invalid credentials', () => {
     // in CI it takes too long to run, and gets blocked by modal popups
     test.skip(!!process.env.CI, 'Email validation - Invalid credentials - run locally only, to many checks');
     for (const credential of invalidCredentials) {
-        test(`Invalid credential: ${credential}`, async ({ page}) => {
+        test(`Invalid credential: ${credential}`, async ({ page }) => {
             const registerPage = new RegisterPage(page);
             await registerPage.goto();
             await registerPage.usernameInput.fill(credential);
