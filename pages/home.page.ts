@@ -5,12 +5,13 @@ import { BasePage } from "./base.page";
 export class HomePage extends BasePage {
     public header: RootHeader;
     readonly appleLoginButton: Locator;
-    private overlayHandlersRegistered = false;
+    readonly googleLoginButton: Locator;
 
     constructor(page: Page) {
         super(page);
         this.header = new RootHeader(page);
         this.appleLoginButton = page.locator('#apple-login > .third-part-btn');
+        this.googleLoginButton = page.locator('iframe[src*="accounts.google.com/gsi/"]');
     }
 
     async goto() {
