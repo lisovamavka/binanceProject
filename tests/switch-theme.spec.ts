@@ -2,6 +2,8 @@ import { test, expect } from '@playwright/test';
 import { HomePage } from '../pages/home.page';
 
 test.describe('Switch Theme', () => {
+  test.skip(!!process.env.CI, 'External Binance — run locally only');
+
   test('Go to the home page and switch theme', async ({ page }) => {
     const homePage = new HomePage(page);
 
