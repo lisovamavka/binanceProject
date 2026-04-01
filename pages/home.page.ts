@@ -5,18 +5,22 @@ import { BasePage } from "./base.page";
 export class HomePage extends BasePage {
     public header: RootHeader;
     readonly appleLoginButton: Locator;
+    readonly themeToggleButton: Locator;
+
     readonly googleLoginButton: Locator;
     readonly googleLoginIFrame: Locator;
     readonly signUpButton: Locator;
-
+    readonly buyCryptoMenuItem: Locator;
 
     constructor(page: Page) {
         super(page);
         this.header = new RootHeader(page);
         this.appleLoginButton = page.locator('#apple-login > .third-part-btn');
+        this.themeToggleButton = page.locator('.bn-svg.theme-icon');
         this.googleLoginButton = page.locator('#google-login > .third-part-btn');
         this.googleLoginIFrame = page.locator('iframe[src*="accounts.google.com/gsi/"]');
         this.signUpButton = page.locator('#toRegisterPage').getByText('Sign Up');
+        this.buyCryptoMenuItem = page.locator('#ba-titile2-2');
     }
 
     async goto() {
@@ -28,11 +32,20 @@ export class HomePage extends BasePage {
         return await this.page.title();
     }
 
+
     async verifyAndClickMarketTab() {
         await expect(this.header.markets).toBeVisible();
         await expect(this.header.markets).toBeEnabled();
         await this.header.markets.click();
     }
+
+
+    async verifyButtonAndSwitchTheme() {
+        await expect(this.themeToggleButton).toBeVisible();
+        await expect(this.themeToggleButton).toBeEnabled();
+        await this.themeToggleButton.click();
+    }
+  
 
     async checkAndClickSignUpButton() {
         await expect(this.signUpButton).toBeVisible();
