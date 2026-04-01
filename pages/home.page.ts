@@ -32,12 +32,21 @@ export class HomePage extends BasePage {
         return await this.page.title();
     }
 
+
+    async verifyAndClickMarketTab() {
+        await expect(this.header.markets).toBeVisible();
+        await expect(this.header.markets).toBeEnabled();
+        await this.header.markets.click();
+    }
+
+
     async verifyButtonAndSwitchTheme() {
         await expect(this.themeToggleButton).toBeVisible();
         await expect(this.themeToggleButton).toBeEnabled();
         await this.themeToggleButton.click();
     }
   
+
     async checkAndClickSignUpButton() {
         await expect(this.signUpButton).toBeVisible();
         await expect(this.signUpButton).toBeEnabled();
